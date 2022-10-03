@@ -3,24 +3,32 @@
 	import { letterStates, mode } from "../../stores";
 	import { COLS, keys } from "../../utils";
 	import Key from "./Key.svelte";
+	import type { ServerResponse } from "../../server_mocks";
+	import { 
+		wordleKeyPressed, 
+		checkGuess,
+		deleteKeyPressed,
+	} from "../../server_mocks";
 
-	export let value = "";
+	export let server_response = {}
+	
+	// export let value = "";
 	export let disabled = false;
 	let preventChange = true;
 
 	const dispatch = createEventDispatcher();
 
 	function appendValue(char: string) {
-		if (!disabled && value.length < COLS) {
-			dispatch("keystroke", char);
-			value += char;
-		}
+		server_response = wordleKeyPressed(char);
 	}
 	function backspaceValue() {
-		if (!disabled) {
-			value = value.slice(0, value.length - 1);
-		}
+		server_response = deleteKeyPressed();
 	}
+
+	function enterPressed() {
+		server_response = checkGuess();		
+	}
+
 	function handleKeystroke(e: KeyboardEvent) {
 		if (!disabled && !e.ctrlKey && !e.altKey) {
 			if (e.key && /^[a-z]$/.test(e.key.toLowerCase())) {
@@ -28,9 +36,8 @@
 			}
 			if (e.key === "Backspace") return backspaceValue();
 
-			if (e.key === "Enter") return dispatch("submitWord");
+			if (e.key === "Enter") return enterPressed();
 		}
-		if (e.key === "Escape") dispatch("esc");
 	}
 
 	// Ensure keys change on load instead of loading their state color & change the color of all the keys to neutral, then to their correct color on mode change
@@ -63,7 +70,7 @@
 		{/each}
 	</div>
 	<div class="row">
-		<Key letter="ENTER" on:keystroke={() => !disabled && dispatch("submitWord")} />
+		<Key letter="ENTER" on:keystroke={enterPressed} />
 		{#each keys[2] as letter}
 			<Key
 				{letter}

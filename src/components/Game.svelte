@@ -31,6 +31,9 @@
 		words,
 	} from "../utils";
 	import { letterStates, settings, mode } from "../stores";
+	import type { ServerResponse } from "../server_mocks";
+
+	let server_response: ServerResponse;
 
 	export let word: string;
 	export let stats: Stats;
@@ -175,13 +178,8 @@
 		on:keystroke={() => {
 			if ($settings.tutorial) $settings.tutorial = 0;
 		}}
-		bind:value={game.board.words[game.guesses === ROWS ? 0 : game.guesses]}
+		bind:server_response={server_response}
 		on:submitWord={submitWord}
-		on:esc={() => {
-			showTutorial = false;
-			showStats = false;
-			showSettings = false;
-		}}
 		disabled={!game.active || $settings.tutorial === 3}
 	/>
 </main>
