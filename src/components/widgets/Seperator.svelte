@@ -6,9 +6,6 @@
 	<div>
 		<slot name="1" />
 	</div>
-	<div>
-		<slot name="2" />
-	</div>
 </div>
 
 <style>

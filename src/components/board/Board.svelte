@@ -2,7 +2,6 @@
 	import { getRowData, words } from "../../utils";
 
 	import Row from "./Row.svelte";
-	import ContextMenu from "../widgets/ContextMenu.svelte";
 	import { createEventDispatcher } from "svelte";
 	import { scale } from "svelte/transition";
 
@@ -17,36 +16,16 @@
 	export function bounce(row: number) {
 		rows[row].bounce();
 	}
-	export function hideCtx(e?: MouseEvent) {
-		if (!e || !e.defaultPrevented) showCtx = false;
-	}
+
 	const dispatch = createEventDispatcher();
 
 	let rows: Row[] = [];
-	let showCtx = false;
 	let pAns = 0;
 	let pSols = 0;
 	let x = 0;
 	let y = 0;
 	let word = "";
-
-	function context(cx: number, cy: number, num: number, val: string) {
-		if (guesses >= num) {
-			x = cx;
-			y = cy;
-			showCtx = true;
-			word = guesses > num ? val : "";
-
-			const match = getRowData(num, board);
-			pAns = words.words.filter((w) => match(w)).length;
-			pSols = pAns + words.valid.filter((w) => match(w)).length;
-		}
-	}
 </script>
-
-{#if showCtx}
-	<ContextMenu {pAns} {pSols} {x} {y} {word} />
-{/if}
 
 <div class="board">
 	{#each value as _, i}
@@ -56,7 +35,6 @@
 			bind:this={rows[i]}
 			bind:value={value[i]}
 			state={board.state[i]}
-			on:ctx={(e) => context(e.detail.x, e.detail.y, i, value[i])}
 		/>
 	{/each}
 	{#if icon}

@@ -12,10 +12,8 @@
 		Tutorial,
 		Statistics,
 		Distribution,
-		Timer,
 		Toaster,
 		ShareGame,
-		Tips,
 	} from "./widgets";
 	import {
 		contractNum,
@@ -51,11 +49,6 @@
 	let showRefresh = false;
 
 	let board: Board;
-	let timer: Timer;
-	let tips: Tips;
-
-	let tip = 0;
-	$: if (showSettings && tips) tip = Math.floor(tips.length * Math.random());
 
 	function submitWord() {
 		if (game.board.words[game.guesses].length !== COLS) {
@@ -146,7 +139,6 @@
 		$letterStates = createLetterStates();
 		showStats = false;
 		showRefresh = false;
-		timer.reset($mode);
 	}
 
 	function setShowStatsTrue() {
@@ -158,8 +150,6 @@
 	});
 	// $: toaster.pop(word);
 </script>
-
-<svelte:body on:click={board.hideCtx} on:contextmenu={board.hideCtx} />
 
 <main class:guesses={game.guesses !== 0} style="--rows: {ROWS}; --cols: {COLS}">
 	<Header
@@ -184,7 +174,6 @@
 	<Keyboard
 		on:keystroke={() => {
 			if ($settings.tutorial) $settings.tutorial = 0;
-			board.hideCtx();
 		}}
 		bind:value={game.board.words[game.guesses === ROWS ? 0 : game.guesses]}
 		on:submitWord={submitWord}
@@ -206,12 +195,8 @@
 </Modal>
 
 <Modal bind:visible={showStats}>
-	{#if modeData.modes[$mode].historical}
-		<h2 class="historical">Statistics not available for historical games</h2>
-	{:else}
-		<Statistics data={stats} />
-		<Distribution distribution={stats.guesses} {game} />
-	{/if}
+	<Statistics data={stats} />
+	<Distribution distribution={stats.guesses} {game} />
 	<Seperator visible={!game.active}>
 		<Share slot="1" state={game} />
 	</Seperator>
@@ -222,7 +207,6 @@
 	{#if game.active}
 		<div class="concede" on:click={concede}>give up</div>
 	{/if}
-	<Tips bind:this={tips} index={tip} />
 
 	<div slot="footer">
 		<a href="https://www.nytimes.com/games/wordle/" target="_blank">Original Wordle</a>
@@ -252,12 +236,6 @@
 		max-width: var(--game-width);
 		margin: auto;
 		position: relative;
-	}
-	.historical {
-		text-align: center;
-		margin-top: 10px;
-		padding: 0 20px;
-		text-transform: uppercase;
 	}
 	.concede {
 		margin-top: 15px;
