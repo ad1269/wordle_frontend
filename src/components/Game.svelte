@@ -9,7 +9,6 @@
 	import {
 		Share,
 		Seperator,
-		Definition,
 		Tutorial,
 		Statistics,
 		Distribution,
@@ -214,21 +213,8 @@
 		<Distribution distribution={stats.guesses} {game} />
 	{/if}
 	<Seperator visible={!game.active}>
-		<Timer
-			slot="1"
-			bind:this={timer}
-			on:timeup={() => (showRefresh = true)}
-			on:reload={reload}
-		/>
-		<Share slot="2" state={game} />
+		<Share slot="1" state={game} />
 	</Seperator>
-	<ShareGame wordNumber={game.wordNumber} />
-	{#if !game.active}
-		<Definition {word} alternates={2} />
-	{:else}
-		<!-- Fade with delay is to prevent a bright red button from appearing as soon as refresh is pressed -->
-		<div in:fade={{ delay: 300 }} class="concede" on:click={concede}>give up</div>
-	{/if}
 </Modal>
 
 <Modal fullscreen={true} bind:visible={showSettings}>

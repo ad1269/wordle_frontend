@@ -1,6 +1,4 @@
 <script lang="ts">
-	import Definition from "./Definition.svelte";
-
 	export let x = 0;
 	export let y = 0;
 	export let word = "";
@@ -20,7 +18,6 @@
 			<br />
 			{pSols} valid guess{pSols > 1 ? "es" : ""}
 		</div>
-		<Definition {word} alternates={1} />
 	{:else}
 		<div>
 			Considering all hints, there {pAns > 1 ? "are" : "is"}:

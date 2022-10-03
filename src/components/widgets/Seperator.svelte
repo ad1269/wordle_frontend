@@ -18,9 +18,6 @@
 	.sep {
 		display: none;
 	}
-	.sep :first-child {
-		border-right: 1px solid var(--fg-primary);
-	}
 	.sep div {
 		flex: 1;
 		display: grid;
