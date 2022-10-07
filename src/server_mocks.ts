@@ -1,3 +1,5 @@
+import { ROWS, COLS } from "./utils";
+
 export type ServerResponse = {
 	guessedWords: Array<string>,
 	boardColors: Array<string>,
@@ -24,9 +26,51 @@ export function deleteKeyPressed(): ServerResponse {
 
 function testResponse(): ServerResponse {
 	return {
-		guessedWords: ["DINOS"],
-		boardColors: ["BBGGY"],
+		guessedWords: ["DINOS", "HALLS", "HALLS", 
+					"COOfD", "HALLS", "HALLS"],
+		boardColors: ["BBGGY",  "BBGGY", "BBGGY",
+					"BBGGY", "BBGGY", "BBGGY"],
 		letterColors: "BBBBBBBBBBBBBBBBBBBBBGYDB",
 		showInvalidGuessAnimation:false,
 	}
+}
+
+export function emptyResponse(): ServerResponse {
+	return {
+		guessedWords: Array(6).fill(""),
+		boardColors: Array(6).fill("BBBBB"),
+		letterColors: "BBBBBBBBBBBBBBBBBBBBBBBBB",
+		showInvalidGuessAnimation:false,
+	}
+}
+
+export function letterStateFromServerResponse(
+	server_response: ServerResponse): LetterState[][] {
+	let boardColors = server_response["boardColors"];
+	let letterStates = [];
+
+	for (let i = 0; i < ROWS; i++) {
+		letterStates.push([]);
+		for (let j = 0; j < COLS; j++) {
+			switch(boardColors[i][j]) {
+				case "G":
+					letterStates[i].push("🟩");
+					break;
+				case "Y":
+					letterStates[i].push("🟨");
+					break;
+				case "D":
+					letterStates[i].push("⬛");
+					break;
+				case "B":
+				default:
+					letterStates[i].push("🔳");
+				break;
+			}
+		}
+	}
+	console.log("lsfsr", boardColors);
+	console.log("lsfsr 2", letterStates);
+
+	return letterStates;
 }

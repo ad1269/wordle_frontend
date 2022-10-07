@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { createEventDispatcher, onDestroy } from "svelte/internal";
-	import { letterStates, mode } from "../../stores";
+	import { letterStates, mode, server_response } from "../../stores";
 	import { COLS, keys } from "../../utils";
 	import Key from "./Key.svelte";
 	import type { ServerResponse } from "../../server_mocks";
@@ -10,7 +10,7 @@
 		deleteKeyPressed,
 	} from "../../server_mocks";
 
-	export let server_response = {}
+	// export let server_response = {}
 	
 	// export let value = "";
 	export let disabled = false;
@@ -19,14 +19,14 @@
 	const dispatch = createEventDispatcher();
 
 	function appendValue(char: string) {
-		server_response = wordleKeyPressed(char);
+		$server_response = wordleKeyPressed(char);
 	}
 	function backspaceValue() {
-		server_response = deleteKeyPressed();
+		$server_response = deleteKeyPressed();
 	}
 
 	function enterPressed() {
-		server_response = checkGuess();		
+		$server_response = checkGuess();		
 	}
 
 	function handleKeystroke(e: KeyboardEvent) {

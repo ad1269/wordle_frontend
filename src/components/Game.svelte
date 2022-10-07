@@ -30,10 +30,17 @@
 		createLetterStates,
 		words,
 	} from "../utils";
-	import { letterStates, settings, mode } from "../stores";
+	import { 
+		letterStates,
+		settings,
+		mode,
+		server_response
+	} from "../stores";
 	import type { ServerResponse } from "../server_mocks";
-
-	let server_response: ServerResponse;
+	import {
+		emptyResponse,
+		letterStateFromServerResponse 
+	} from "../server_mocks";
 
 	export let word: string;
 	export let stats: Stats;
@@ -42,6 +49,14 @@
 
 	setContext("toaster", toaster);
 	const version = getContext<string>("version");
+
+	$: $server_response, game.board = { 
+		words: $server_response["guessedWords"], 
+		state: letterStateFromServerResponse($server_response),
+	};
+	$: $server_response, $letterStates =letterStateFromServerResponse($server_response);
+
+	// $: $server_response, console.log($server_response);
 
 	// implement transition delay on keys
 	const delay = DELAY_INCREMENT * ROWS + 800;
@@ -167,7 +182,7 @@
 	/>
 	<Board
 		bind:this={board}
-		bind:value={game.board.words}
+		bind:value={$server_response["guessedWords"]}
 		tutorial={$settings.tutorial === 1}
 		on:closeTutPopUp|once={() => ($settings.tutorial = 0)}
 		board={game.board}
@@ -178,7 +193,6 @@
 		on:keystroke={() => {
 			if ($settings.tutorial) $settings.tutorial = 0;
 		}}
-		bind:server_response={server_response}
 		on:submitWord={submitWord}
 		disabled={!game.active || $settings.tutorial === 3}
 	/>
