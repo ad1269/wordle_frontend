@@ -10,9 +10,6 @@
 		deleteKeyPressed,
 	} from "../../server_mocks";
 
-	// export let server_response = {}
-	
-	// export let value = "";
 	export let disabled = false;
 	let preventChange = true;
 

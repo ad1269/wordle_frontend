@@ -1,4 +1,4 @@
-import { ROWS, COLS } from "./utils";
+import { ROWS, COLS, createLetterStates } from "./utils";
 
 export type ServerResponse = {
 	guessedWords: Array<string>,
@@ -30,7 +30,7 @@ function testResponse(): ServerResponse {
 					"COOfD", "HALLS", "HALLS"],
 		boardColors: ["BBGGY",  "BBGGY", "BBGGY",
 					"BBGGY", "BBGGY", "BBGGY"],
-		letterColors: "BBBBBBBBBBBBBBBBBBBBBGYDB",
+		letterColors: "BBBBBBBBBBBBBBBBBBBBBBGYDB",
 		showInvalidGuessAnimation:false,
 	}
 }
@@ -39,12 +39,12 @@ export function emptyResponse(): ServerResponse {
 	return {
 		guessedWords: Array(6).fill(""),
 		boardColors: Array(6).fill("BBBBB"),
-		letterColors: "BBBBBBBBBBBBBBBBBBBBBBBBB",
+		letterColors: "BBBBBBBBBBBBBBBBBBBBBBBBBB",
 		showInvalidGuessAnimation:false,
 	}
 }
 
-export function letterStateFromServerResponse(
+export function boardStateFromServerResponse(
 	server_response: ServerResponse): LetterState[][] {
 	let boardColors = server_response["boardColors"];
 	let letterStates = [];
@@ -69,7 +69,40 @@ export function letterStateFromServerResponse(
 			}
 		}
 	}
-	console.log("lsfsr", boardColors);
+	console.log("bsfsr", boardColors);
+	console.log("bsfsr 2", letterStates);
+
+	return letterStates;
+}
+
+export function letterStateFromServerResponse(server_response: 
+	ServerResponse): { [key: string]: LetterState; } {
+
+	let letterColors = server_response["letterColors"];
+	let letterStates = createLetterStates();
+
+	let letters = "abcdefghijklmonpqrstuvwxy";
+
+	for (let i = 0; i < letters.length; i++) {
+		let val;
+		switch(letterColors[i]) {
+			case "G":
+				val = "🟩";
+				break;
+			case "Y":
+				val = "🟨";
+				break;
+			case "D":
+				val = "⬛";
+				break;
+			case "B":
+			default:
+				val = "🔳";
+			break;
+		}
+		letterStates[letters[i]] = val;
+	}
+	console.log("lsfsr", letterColors);
 	console.log("lsfsr 2", letterStates);
 
 	return letterStates;

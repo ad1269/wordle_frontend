@@ -39,7 +39,8 @@
 	import type { ServerResponse } from "../server_mocks";
 	import {
 		emptyResponse,
-		letterStateFromServerResponse 
+		boardStateFromServerResponse,
+		letterStateFromServerResponse,	
 	} from "../server_mocks";
 
 	export let word: string;
@@ -52,7 +53,7 @@
 
 	$: $server_response, game.board = { 
 		words: $server_response["guessedWords"], 
-		state: letterStateFromServerResponse($server_response),
+		state: boardStateFromServerResponse($server_response),
 	};
 	$: $server_response, $letterStates =letterStateFromServerResponse($server_response);
 
