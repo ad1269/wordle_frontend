@@ -16,14 +16,18 @@
 	const dispatch = createEventDispatcher();
 
 	function appendValue(char: string) {
-		$server_response = wordleKeyPressed(char);
+		wordleKeyPressed(char)
+			.then((sr) => $server_response = sr);		
 	}
+	
 	function backspaceValue() {
-		$server_response = deleteKeyPressed();
+		deleteKeyPressed()
+			.then((sr) => $server_response = sr);
 	}
 
 	function enterPressed() {
-		$server_response = checkGuess();		
+		checkGuess()
+			.then((sr) => $server_response = sr);		
 	}
 
 	function handleKeystroke(e: KeyboardEvent) {
