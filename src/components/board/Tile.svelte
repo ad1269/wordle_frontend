@@ -80,7 +80,7 @@
 	}
 	.back {
 		background: var(--color-absent);
-		transform: rotateX(180deg);
+		transform: rotateX(0deg);
 	}
 	.🟩 .back {
 		background: var(--color-correct);
