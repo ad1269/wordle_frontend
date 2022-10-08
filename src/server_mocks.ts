@@ -152,7 +152,7 @@ export function letterStateFromServerResponse(server_response:
 	let letterColors = server_response["letterColors"];
 	let letterStates = createLetterStates();
 
-	let letters = "abcdefghijklmonpqrstuvwxy";
+	let letters = "abcdefghijklmnopqrstuvwxyz";
 
 	for (let i = 0; i < letters.length; i++) {
 		let val;
